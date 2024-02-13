@@ -10,8 +10,7 @@ let grille;
 
 function init() {
   console.log("Page et ressources prêtes à l'emploi");
-  // appelée quand la page et ses ressources sont prêtes.
-  // On dit aussi que le DOM est ready (en fait un peu plus...)
+
 
   grille = new Grille(9, 9);
   grille.showCookies();
@@ -49,7 +48,4 @@ function updateNiveauOnPage() {
   let niveauElement = document.getElementById("niveau");
   niveauElement.textContent = `Niveau : ${grille.getNiveau()}`;
 }
-
-
-// Dans votre script principal
 

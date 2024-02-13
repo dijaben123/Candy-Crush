@@ -82,15 +82,4 @@ export default class Cookie {
     console.log("Distance = " + distance);
     return distance;
   }
-  
-  // modifier(cookie1){
-  //   const type = Math.round(Math.random() * (5));
-
-  //    cookie1.type=type;
-  //   this.colonne = colonne;
-  //   this.htmlImage.classList.remove("cookiesCachees")
-  //   this.htmlImage.src = Cookie.urlsImagesNormales[type];
-  //   this.htmlImage.width = 80;
-  //   this.htmlImage.height = 80;
-  // }
-}
+  }

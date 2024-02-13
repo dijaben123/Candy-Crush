@@ -275,20 +275,17 @@ export default class Grille {
 
 
   changerNiveau() {
-    // Vous pouvez ajuster la logique pour changer de niveau ici
     this.niveau++;
-    this.cookiesParNiveau = 4 + Math.floor(this.niveau / 5); // Augmenter le nombre de cookies tous les 5 niveaux
+    this.cookiesParNiveau = 4 + Math.floor(this.niveau / 5); 
     this.remplirTableauDeCookies(this.cookiesParNiveau);
   }
    updateScoreOnPage() {
     let scoreElement = document.getElementById("score");
-    grille.incrementerScore(); // Assurez-vous que vous avez une fonction pour incrémenter le score
+    grille.incrementerScore();
     scoreElement.textContent = grille.getScore();
   
-    // Vérifiez si le score atteint 20 pour changer de niveau
     if (grille.getScore() >= 7) {
       grille.changerNiveau();
-      // Vous pouvez ajouter d'autres actions ou messages ici si nécessaire
     }
   }
 
