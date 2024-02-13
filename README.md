@@ -63,4 +63,4 @@ Cette fonction gère le changement de niveau du jeu en augmentant le niveau et e
 
 Cette fonction met à jour le score affiché sur la page et vérifie si le joueur atteint un score spécifique pour passer au niveau suivant.
 
- Amusez-vous à jouer à Cookie Crunch!
+ Amusez-vous à jouer à Cookie Crunch! https://dijaben123.github.io/candy_crash2/
