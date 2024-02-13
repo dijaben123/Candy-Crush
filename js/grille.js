@@ -133,7 +133,6 @@ export default class Grille {
 
 
   // Test des alignements de 3 cookies ou plus, horizontalement et verticalement
-
   testAlignementDansTouteLaGrille() {
     let alignementExisteLignes = this.testAlignementTouteDirection(this.cookies, this.lignes, this.colonnes, true);
     let alignementExisteColonnes = this.testAlignementTouteDirection(this.cookies, this.colonnes, this.lignes, false);
@@ -175,17 +174,18 @@ export default class Grille {
   }
 
 
-  generateCookies(column) {
-    for (let i = this.lignes - 1; i >= 0; i--) {
-      if (this.cookies[i][column].htmlImage.classList.contains("cookieCachee")) {
-        const type = Math.floor(Math.random() * 5);
-        this.cookies[i][column].type = type;
-        this.cookies[i][column].htmlImage.src = Cookie.urlsImagesNormales[this.cookies[i][column].type];
-        this.cookies[i][column].htmlImage.classList.remove("cookieCachee");
+  fillHiddenColumnsAndRows() {
+    for (let column = 0; column < this.colonnes; column++) {
+      for (let row = 0; row < this.lignes; row++) {
+        if (this.cookies[row][column].isCachee()) {
+          const type = Math.floor(Math.random() * 5);
+          this.cookies[row][column].type = type;
+          this.cookies[row][column].htmlImage.src = Cookie.urlsImagesNormales[this.cookies[row][column].type];
+          this.cookies[row][column].htmlImage.classList.remove("cookieCachee");
+        }
       }
     }
   }
-
 
 
 
@@ -194,13 +194,19 @@ export default class Grille {
       for (let row = this.lignes - 1; row >= 0; row--) {
         if (this.cookies[row] && this.cookies[row][column]) {
           let currentCookie = this.cookies[row][column];
-          if (currentCookie.isCachee()) {
+          if (this.cookies[row][column].isCachee()) {
             for (let newRow = row; newRow >= 0; newRow--) {
               if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
                 let upperCookie = this.cookies[newRow - 1][column];
                 if (!upperCookie.isCachee()) {
-                  this.cookies[row][column] = upperCookie;
+                  // Swap des types et des images
+                  [this.cookies[row][column].type] = [upperCookie.type];
+                  this.cookies[row][column].htmlImage.src = Cookie.urlsImagesNormales[this.cookies[row][column].type];
+                  // upperCookie.htmlImage.src = Cookie.urlsImagesNormales[upperCookie.type];
+
+                  // Ajout/Suppression des classes "cookieCachee"
                   this.cookies[row][column].htmlImage.classList.remove('cookieCachee');
+                  upperCookie.htmlImage.classList.add('cookieCachee');
                   row--;
                 }
               }
@@ -208,7 +214,6 @@ export default class Grille {
           }
         }
       }
-      this.generateCookies(column);
     }
 
     for (let i = 0; i < this.lignes; i++) {
@@ -217,8 +222,9 @@ export default class Grille {
         this.cookies[i][j].htmlImage.dataset.colonne = j;
       }
     }
-  }
 
+    this.fillHiddenColumnsAndRows()
+  }
 
 
 
@@ -250,107 +256,107 @@ export default class Grille {
 
 
 
-  // slide() {
-  //   // Shift hidden cookies down
-  //   for (let column = this.colonnes - 1; column >= 0; column--) {
-  //     for (let row = this.lignes - 1; row >= 0; row--) {
-  //       if (this.cookies[row] && this.cookies[row][column]) {
-  //         let currentCookie = this.cookies[row][column];
-  //         if (currentCookie.isCachee()) {
-  //           // console.log(`The cookie at row ${row + 1} and column ${column + 1} is hidden.`);
-  //           for (let newRow = row; newRow >= 0; newRow--) {
-  //             if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
-  //               let upperCookie = this.cookies[newRow - 1][column];
-  //               if (!upperCookie.isCachee()) {
-  //                 // console.log(`Before: Line - ${upperCookie.ligne}, Column - ${upperCookie.colonne}`);
-  //                 this.cookies[row][column] = upperCookie;
-  //                 this.cookies[row][column].htmlImage.classList.remove('cookieCachee');
-  //                 row--;
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
+// slide() {
+//   // Shift hidden cookies down
+//   for (let column = this.colonnes - 1; column >= 0; column--) {
+//     for (let row = this.lignes - 1; row >= 0; row--) {
+//       if (this.cookies[row] && this.cookies[row][column]) {
+//         let currentCookie = this.cookies[row][column];
+//         if (currentCookie.isCachee()) {
+//           // console.log(`The cookie at row ${row + 1} and column ${column + 1} is hidden.`);
+//           for (let newRow = row; newRow >= 0; newRow--) {
+//             if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
+//               let upperCookie = this.cookies[newRow - 1][column];
+//               if (!upperCookie.isCachee()) {
+//                 // console.log(`Before: Line - ${upperCookie.ligne}, Column - ${upperCookie.colonne}`);
+//                 this.cookies[row][column] = upperCookie;
+//                 this.cookies[row][column].htmlImage.classList.remove('cookieCachee');
+//                 row--;
+//               }
+//             }
+//           }
+//         }
+//       }
 
-  //     }
-  //     this.generateCookies(column);
+//     }
+//     this.generateCookies(column);
 
-  //   }
-
-
-  //   for (let i = 0; i < this.lignes; i++) {
-  //     for (let j = 0; j < this.colonnes; j++) {
-  //       this.cookies[i][j].htmlImage.dataset.ligne = i;
-  //       this.cookies[i][j].htmlImage.dataset.colonne = j;
-  //     }
-  //   }
+//   }
 
 
-
-  // }
+//   for (let i = 0; i < this.lignes; i++) {
+//     for (let j = 0; j < this.colonnes; j++) {
+//       this.cookies[i][j].htmlImage.dataset.ligne = i;
+//       this.cookies[i][j].htmlImage.dataset.colonne = j;
+//     }
+//   }
 
 
 
-
-
-
-  //   slide() {
-  //     // Shift hidden cookies down
-  //     for (let column = this.colonnes - 1; column >= 0; column--) {
-  //       for (let row = this.lignes - 1; row >= 0; row--) {
-  //         if (this.cookies[row] && this.cookies[row][column]) {
-  //           let currentCookie = this.cookies[row][column];
-  //           if (currentCookie.isCachee()) {
-  //             for (let newRow = row; newRow >= 0; newRow--) {
-  //               if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
-  //                 const upperCookie = this.cookies[newRow - 1][column];
-  //                 if (!upperCookie.isCachee()) {
-  //                   this.cookies[row][column] = upperCookie;
-  //                   row--;
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-
-  //     // Mettre à jour les attributs dataset des images
-  //     for (let i = 0; i < this.lignes; i++) {
-  //       for (let j = 0; j < this.colonnes; j++) {
-  //         this.cookies[i][j].htmlImage.dataset.ligne = i;
-  //         this.cookies[i][j].htmlImage.dataset.colonne = j;
-  //       }
-  //     }
-
-
-  // let doc=document.querySelectorAll(".cookieCachee")
-  // // doc.
-  //     // for(let i = 0; i < 9;i++) {
-  //     //   for(let j = 0; j < 9;j++) {
-
-  //     //   }
-  //     // }
+// }
 
 
 
 
 
 
-  //     // Récupérer toutes les balises img du document
-  // let toutesLesImages = document.querySelectorAll('img');
+//   slide() {
+//     // Shift hidden cookies down
+//     for (let column = this.colonnes - 1; column >= 0; column--) {
+//       for (let row = this.lignes - 1; row >= 0; row--) {
+//         if (this.cookies[row] && this.cookies[row][column]) {
+//           let currentCookie = this.cookies[row][column];
+//           if (currentCookie.isCachee()) {
+//             for (let newRow = row; newRow >= 0; newRow--) {
+//               if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
+//                 const upperCookie = this.cookies[newRow - 1][column];
+//                 if (!upperCookie.isCachee()) {
+//                   this.cookies[row][column] = upperCookie;
+//                   row--;
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
 
-  // // Parcourir chaque balise img
-  // toutesLesImages.forEach(img => {
-  //   // Vérifier si la balise img a la classe "cookieCachee"
-  //   if (img.classList.contains('cookieCachee')) {
+//     // Mettre à jour les attributs dataset des images
+//     for (let i = 0; i < this.lignes; i++) {
+//       for (let j = 0; j < this.colonnes; j++) {
+//         this.cookies[i][j].htmlImage.dataset.ligne = i;
+//         this.cookies[i][j].htmlImage.dataset.colonne = j;
+//       }
+//     }
 
-  //     // Faire quelque chose avec la balise img qui a la classe "cookieCachee"
-  //     console.log('Cette balise img a la classe cookieCachee:', img);
-  //   }
-  // });
 
-  //   }
+// let doc=document.querySelectorAll(".cookieCachee")
+// // doc.
+//     // for(let i = 0; i < 9;i++) {
+//     //   for(let j = 0; j < 9;j++) {
+
+//     //   }
+//     // }
+
+
+
+
+
+
+//     // Récupérer toutes les balises img du document
+// let toutesLesImages = document.querySelectorAll('img');
+
+// // Parcourir chaque balise img
+// toutesLesImages.forEach(img => {
+//   // Vérifier si la balise img a la classe "cookieCachee"
+//   if (img.classList.contains('cookieCachee')) {
+
+//     // Faire quelque chose avec la balise img qui a la classe "cookieCachee"
+//     console.log('Cette balise img a la classe cookieCachee:', img);
+//   }
+// });
+
+//   }
 
 
 
