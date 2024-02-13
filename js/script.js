@@ -1,8 +1,8 @@
 import Grille from "./grille.js";
 
-// 1 On définisse une sorte de "programme principal"
-// le point d'entrée du code qui sera appelée dès que la
-// page ET SES RESSOURCES est chargée
+// 1. On définit une sorte de "programme principal"
+// le point d'entrée du code qui sera appelé dès que la
+// page ET SES RESSOURCES sont chargées
 
 window.onload = init;
 
@@ -15,16 +15,41 @@ function init() {
 
   grille = new Grille(9, 9);
   grille.showCookies();
+  updateScoreOnPage();
 
   let b = document.querySelector("#buttonTestAlignement");
+  let chronometerStarted = false;
+
   b.onclick = () => {
-    let b=grille.testAlignementDansTouteLaGrille()
-    if(b){
-      grille.slide()
+    let isAlignement = grille.testAlignementDansTouteLaGrille();
 
-      grille.showCookies();
-
+    // Vérifier si le chronomètre n'est pas déjà en cours
+    if (!chronometerStarted) {
+      grille.startChronometer();
+      chronometerStarted = true;
     }
 
-  }
+    if (isAlignement) {
+      grille.slide();
+      updateScoreOnPage();
+      updateNiveauOnPage(); // Ajoutez la mise à jour du niveau
+
+      grille.showCookies();
+    }
+  };
 }
+
+
+function updateScoreOnPage() {
+  let scoreElement = document.getElementById("score");
+  scoreElement.textContent = grille.getScore();
+}
+
+function updateNiveauOnPage() {
+  let niveauElement = document.getElementById("niveau");
+  niveauElement.textContent = `Niveau : ${grille.getNiveau()}`;
+}
+
+
+// Dans votre script principal
+

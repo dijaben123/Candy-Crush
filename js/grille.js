@@ -11,6 +11,10 @@ export default class Grille {
     this.lignes = l;
     // le tableau des cookies
     this.cookies = create2DArray(l);
+    this.score = 0;
+    this.temps=0;
+    this.niveau = 1; // Niveau initial
+    this.cookiesParNiveau = 4; // N
 
     //let existeAlignement = false;
     this.remplirTableauDeCookies(6);
@@ -167,12 +171,30 @@ export default class Grille {
         cookie2.cachee();
         cookie3.cachee();
         alignement = true;
+        this.updateScore(alignement);
+
       }
     }
 
     return alignement;
   }
-
+  updateScore(alignementLength) {
+    // Mise à jour du score en fonction de la longueur de l'alignement
+    // et de la séquence de chutes à la chaîne
+    let scoreIncrement = alignementLength;
+  
+    if (this.cookiesSelectionnees.length > 1) {
+      // Augmentez le score en fonction de la séquence de chutes à la chaîne
+      scoreIncrement *= this.cookiesSelectionnees.length;
+    }
+  
+    // Mettez à jour le score total
+    this.score += scoreIncrement;
+  
+    // Affichez ou utilisez le score dans votre application (ex : console.log)
+    console.log('Score total :', this.score);
+  }
+  
 
   fillHiddenColumnsAndRows() {
     for (let column = 0; column < this.colonnes; column++) {
@@ -226,137 +248,52 @@ export default class Grille {
     this.fillHiddenColumnsAndRows()
   }
 
+  getScore() {
+    return this.score;
+  }
+  getTemps() {
+    return this.temps;
+  }
+  
+  updateTimeOnPage() {
+    let tempsElement = document.getElementById("temps");
+    tempsElement.textContent = `Temps : ${this.getTemps()}`;
+  }
+  
+  startChronometer() {
+    this.temps = 0;
+    this.chronometerInterval = setInterval(() => {
+      this.temps++;
+      this.updateTimeOnPage();
+    }, 1000); // Mettez à jour toutes les secondes
+  }
+  
+  // stopChronometer() {
+  //   clearInterval(this.chronometerInterval);
+  // }
+  
 
 
+  changerNiveau() {
+    // Vous pouvez ajuster la logique pour changer de niveau ici
+    this.niveau++;
+    this.cookiesParNiveau = 4 + Math.floor(this.niveau / 5); // Augmenter le nombre de cookies tous les 5 niveaux
+    this.remplirTableauDeCookies(this.cookiesParNiveau);
+  }
+   updateScoreOnPage() {
+    let scoreElement = document.getElementById("score");
+    grille.incrementerScore(); // Assurez-vous que vous avez une fonction pour incrémenter le score
+    scoreElement.textContent = grille.getScore();
+  
+    // Vérifiez si le score atteint 20 pour changer de niveau
+    if (grille.getScore() >= 7) {
+      grille.changerNiveau();
+      // Vous pouvez ajouter d'autres actions ou messages ici si nécessaire
+    }
+  }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+  getNiveau() {
+    return this.niveau;
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// slide() {
-//   // Shift hidden cookies down
-//   for (let column = this.colonnes - 1; column >= 0; column--) {
-//     for (let row = this.lignes - 1; row >= 0; row--) {
-//       if (this.cookies[row] && this.cookies[row][column]) {
-//         let currentCookie = this.cookies[row][column];
-//         if (currentCookie.isCachee()) {
-//           // console.log(`The cookie at row ${row + 1} and column ${column + 1} is hidden.`);
-//           for (let newRow = row; newRow >= 0; newRow--) {
-//             if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
-//               let upperCookie = this.cookies[newRow - 1][column];
-//               if (!upperCookie.isCachee()) {
-//                 // console.log(`Before: Line - ${upperCookie.ligne}, Column - ${upperCookie.colonne}`);
-//                 this.cookies[row][column] = upperCookie;
-//                 this.cookies[row][column].htmlImage.classList.remove('cookieCachee');
-//                 row--;
-//               }
-//             }
-//           }
-//         }
-//       }
-
-//     }
-//     this.generateCookies(column);
-
-//   }
-
-
-//   for (let i = 0; i < this.lignes; i++) {
-//     for (let j = 0; j < this.colonnes; j++) {
-//       this.cookies[i][j].htmlImage.dataset.ligne = i;
-//       this.cookies[i][j].htmlImage.dataset.colonne = j;
-//     }
-//   }
-
-
-
-// }
-
-
-
-
-
-
-//   slide() {
-//     // Shift hidden cookies down
-//     for (let column = this.colonnes - 1; column >= 0; column--) {
-//       for (let row = this.lignes - 1; row >= 0; row--) {
-//         if (this.cookies[row] && this.cookies[row][column]) {
-//           let currentCookie = this.cookies[row][column];
-//           if (currentCookie.isCachee()) {
-//             for (let newRow = row; newRow >= 0; newRow--) {
-//               if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
-//                 const upperCookie = this.cookies[newRow - 1][column];
-//                 if (!upperCookie.isCachee()) {
-//                   this.cookies[row][column] = upperCookie;
-//                   row--;
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-
-//     // Mettre à jour les attributs dataset des images
-//     for (let i = 0; i < this.lignes; i++) {
-//       for (let j = 0; j < this.colonnes; j++) {
-//         this.cookies[i][j].htmlImage.dataset.ligne = i;
-//         this.cookies[i][j].htmlImage.dataset.colonne = j;
-//       }
-//     }
-
-
-// let doc=document.querySelectorAll(".cookieCachee")
-// // doc.
-//     // for(let i = 0; i < 9;i++) {
-//     //   for(let j = 0; j < 9;j++) {
-
-//     //   }
-//     // }
-
-
-
-
-
-
-//     // Récupérer toutes les balises img du document
-// let toutesLesImages = document.querySelectorAll('img');
-
-// // Parcourir chaque balise img
-// toutesLesImages.forEach(img => {
-//   // Vérifier si la balise img a la classe "cookieCachee"
-//   if (img.classList.contains('cookieCachee')) {
-
-//     // Faire quelque chose avec la balise img qui a la classe "cookieCachee"
-//     console.log('Cette balise img a la classe cookieCachee:', img);
-//   }
-// });
-
-//   }
-
-
-
