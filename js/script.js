@@ -16,13 +16,15 @@ function init() {
   grille = new Grille(9, 9);
   grille.showCookies();
 
-  let b = document.querySelector("#buttonTestAlignement");
-  b.onclick = () => {
-    grille.testAlignementDansTouteLaGrille()
-    grille.slide()
-    grille.showCookies();
-    // grille.remplireApresSlide();
+// Définition de la fonction qui sera appelée toutes les 500 secondes (500000 millisecondes)
+function verifierEtMettreAJour() {
+  grille.testAlignementDansTouteLaGrille();
+  grille.slide();
+  grille.showCookies();
+  // Ajoutez d'autres fonctions ici si nécessaire
+}
 
-    // grille.remplirTableauDeCookies2()
-  }
+// Appel de la fonction toutes les 500 secondes (500000 millisecondes)
+setInterval(verifierEtMettreAJour, 5);
+
   }

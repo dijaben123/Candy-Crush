@@ -135,36 +135,33 @@ export default class Grille {
   // Test des alignements de 3 cookies ou plus, horizontalement et verticalement
 
   testAlignementDansTouteLaGrille() {
-    let alignementExisteLignes = false;
-    let alignementExisteColonnes = false;
-
-    alignementExisteLignes = this.testAlignementToutesLesLignes();
-    alignementExisteColonnes = this.testAlignementToutesLesColonnes();
+    let alignementExisteLignes = this.testAlignementTouteDirection(this.cookies, this.lignes, this.colonnes, true);
+    let alignementExisteColonnes = this.testAlignementTouteDirection(this.cookies, this.colonnes, this.lignes, false);
 
     return (alignementExisteLignes || alignementExisteColonnes);
   }
 
-  testAlignementToutesLesLignes() {
-    let alignementLignes = false;
+  testAlignementTouteDirection(tabCookies, premierIndice, deuxiemeIndice, isLigne) {
+    let alignementExiste = false;
 
-    for (let i = 0; i < this.lignes; i++) {
-      alignementLignes = this.testAlignementLigne(i);
+    for (let i = 0; i < premierIndice; i++) {
+      let alignementCourant = this.testAlignementDirection(tabCookies, i, deuxiemeIndice, isLigne);
+
+      if (alignementCourant) {
+        alignementExiste = true;
+      }
     }
 
-    return alignementLignes;
+    return alignementExiste;
   }
 
-  testAlignementLigne(ligne) {
+  testAlignementDirection(tabCookies, indice, taille, isLigne) {
     let alignement = false;
 
-    // on récupère le tableau qui correspond à la ligne
-    let tabLigne = this.cookies[ligne];
-
-    //on parcours les colonnes de la ligne courante
-    for (let c = 0; c <= this.lignes - 3; c++) {
-      let cookie1 = tabLigne[c];
-      let cookie2 = tabLigne[c + 1];
-      let cookie3 = tabLigne[c + 2];
+    for (let j = 0; j <= taille - 3; j++) {
+      let cookie1 = isLigne ? tabCookies[indice][j] : tabCookies[j][indice];
+      let cookie2 = isLigne ? tabCookies[indice][j + 1] : tabCookies[j + 1][indice];
+      let cookie3 = isLigne ? tabCookies[indice][j + 2] : tabCookies[j + 2][indice];
 
       if ((cookie1.type === cookie2.type) && (cookie2.type === cookie3.type)) {
         cookie1.cachee();
@@ -173,64 +170,45 @@ export default class Grille {
         alignement = true;
       }
     }
+
     return alignement;
   }
-  testAlignementToutesLesColonnes() {
-    let alignementColonnes = false;
-    for (let i = 0; i < this.colonnes; i++) {
-      alignementColonnes = this.testAlignementColonne(i);
-    }
 
-    return alignementColonnes;
-  }
 
-  testAlignementColonne(colonne) {
-    let alignement = false;
-
-    // on parcourt les lignes de la colonne courante
-    for (let l = 0; l <= this.colonnes - 3; l++) {
-      let cookie1 = this.cookies[l][colonne];
-      let cookie2 = this.cookies[l + 1][colonne];
-      let cookie3 = this.cookies[l + 2][colonne];
-
-      if ((cookie1.type === cookie2.type) && (cookie2.type === cookie3.type)) {
-        cookie1.cachee();
-        cookie2.cachee();
-        cookie3.cachee();
-        alignement = true;
+  generateCookies(column) {
+    for (let i = this.lignes - 1; i >= 0; i--) {
+      if (this.cookies[i][column].htmlImage.classList.contains("cookieCachee")) {
+        const type = Math.floor(Math.random() * 5);
+        this.cookies[i][column].type = type;
+        this.cookies[i][column].htmlImage.src = Cookie.urlsImagesNormales[this.cookies[i][column].type];
+        this.cookies[i][column].htmlImage.classList.remove("cookieCachee");
       }
     }
-    return alignement;
   }
 
 
 
 
   slide() {
-    // Shift hidden cookies down
     for (let column = this.colonnes - 1; column >= 0; column--) {
       for (let row = this.lignes - 1; row >= 0; row--) {
         if (this.cookies[row] && this.cookies[row][column]) {
           let currentCookie = this.cookies[row][column];
           if (currentCookie.isCachee()) {
-            // console.log(`The cookie at row ${row + 1} and column ${column + 1} is hidden.`);
             for (let newRow = row; newRow >= 0; newRow--) {
               if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
                 let upperCookie = this.cookies[newRow - 1][column];
                 if (!upperCookie.isCachee()) {
-                  // console.log(`Before: Line - ${upperCookie.ligne}, Column - ${upperCookie.colonne}`);
                   this.cookies[row][column] = upperCookie;
                   this.cookies[row][column].htmlImage.classList.remove('cookieCachee');
-                  // console.log("After");
                   row--;
                 }
               }
             }
           }
         }
-
       }
-
+      this.generateCookies(column);
     }
 
     for (let i = 0; i < this.lignes; i++) {
@@ -239,75 +217,7 @@ export default class Grille {
         this.cookies[i][j].htmlImage.dataset.colonne = j;
       }
     }
-
-
-
   }
-
-
-
-
-
-
-//   slide() {
-//     // Shift hidden cookies down
-//     for (let column = this.colonnes - 1; column >= 0; column--) {
-//       for (let row = this.lignes - 1; row >= 0; row--) {
-//         if (this.cookies[row] && this.cookies[row][column]) {
-//           let currentCookie = this.cookies[row][column];
-//           if (currentCookie.isCachee()) {
-//             for (let newRow = row; newRow >= 0; newRow--) {
-//               if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
-//                 const upperCookie = this.cookies[newRow - 1][column];
-//                 if (!upperCookie.isCachee()) {
-//                   this.cookies[row][column] = upperCookie;
-//                   row--;
-//                 }
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-  
-//     // Mettre à jour les attributs dataset des images
-//     for (let i = 0; i < this.lignes; i++) {
-//       for (let j = 0; j < this.colonnes; j++) {
-//         this.cookies[i][j].htmlImage.dataset.ligne = i;
-//         this.cookies[i][j].htmlImage.dataset.colonne = j;
-//       }
-//     }
-
-
-// let doc=document.querySelectorAll(".cookieCachee")
-// // doc.
-//     // for(let i = 0; i < 9;i++) {
-//     //   for(let j = 0; j < 9;j++) {
-        
-//     //   }
-//     // }
-
-
-
-
-
-
-//     // Récupérer toutes les balises img du document
-// let toutesLesImages = document.querySelectorAll('img');
-
-// // Parcourir chaque balise img
-// toutesLesImages.forEach(img => {
-//   // Vérifier si la balise img a la classe "cookieCachee"
-//   if (img.classList.contains('cookieCachee')) {
-
-//     // Faire quelque chose avec la balise img qui a la classe "cookieCachee"
-//     console.log('Cette balise img a la classe cookieCachee:', img);
-//   }
-// });
-
-//   }
-  
-
 
 
 
@@ -331,6 +241,116 @@ export default class Grille {
 
 
 
+
+
+
+
+
+
+
+
+
+  // slide() {
+  //   // Shift hidden cookies down
+  //   for (let column = this.colonnes - 1; column >= 0; column--) {
+  //     for (let row = this.lignes - 1; row >= 0; row--) {
+  //       if (this.cookies[row] && this.cookies[row][column]) {
+  //         let currentCookie = this.cookies[row][column];
+  //         if (currentCookie.isCachee()) {
+  //           // console.log(`The cookie at row ${row + 1} and column ${column + 1} is hidden.`);
+  //           for (let newRow = row; newRow >= 0; newRow--) {
+  //             if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
+  //               let upperCookie = this.cookies[newRow - 1][column];
+  //               if (!upperCookie.isCachee()) {
+  //                 // console.log(`Before: Line - ${upperCookie.ligne}, Column - ${upperCookie.colonne}`);
+  //                 this.cookies[row][column] = upperCookie;
+  //                 this.cookies[row][column].htmlImage.classList.remove('cookieCachee');
+  //                 row--;
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+
+  //     }
+  //     this.generateCookies(column);
+
+  //   }
+
+
+  //   for (let i = 0; i < this.lignes; i++) {
+  //     for (let j = 0; j < this.colonnes; j++) {
+  //       this.cookies[i][j].htmlImage.dataset.ligne = i;
+  //       this.cookies[i][j].htmlImage.dataset.colonne = j;
+  //     }
+  //   }
+
+
+
+  // }
+
+
+
+
+
+
+  //   slide() {
+  //     // Shift hidden cookies down
+  //     for (let column = this.colonnes - 1; column >= 0; column--) {
+  //       for (let row = this.lignes - 1; row >= 0; row--) {
+  //         if (this.cookies[row] && this.cookies[row][column]) {
+  //           let currentCookie = this.cookies[row][column];
+  //           if (currentCookie.isCachee()) {
+  //             for (let newRow = row; newRow >= 0; newRow--) {
+  //               if (newRow > 0 && this.cookies[newRow - 1] && this.cookies[newRow - 1][column]) {
+  //                 const upperCookie = this.cookies[newRow - 1][column];
+  //                 if (!upperCookie.isCachee()) {
+  //                   this.cookies[row][column] = upperCookie;
+  //                   row--;
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+
+  //     // Mettre à jour les attributs dataset des images
+  //     for (let i = 0; i < this.lignes; i++) {
+  //       for (let j = 0; j < this.colonnes; j++) {
+  //         this.cookies[i][j].htmlImage.dataset.ligne = i;
+  //         this.cookies[i][j].htmlImage.dataset.colonne = j;
+  //       }
+  //     }
+
+
+  // let doc=document.querySelectorAll(".cookieCachee")
+  // // doc.
+  //     // for(let i = 0; i < 9;i++) {
+  //     //   for(let j = 0; j < 9;j++) {
+
+  //     //   }
+  //     // }
+
+
+
+
+
+
+  //     // Récupérer toutes les balises img du document
+  // let toutesLesImages = document.querySelectorAll('img');
+
+  // // Parcourir chaque balise img
+  // toutesLesImages.forEach(img => {
+  //   // Vérifier si la balise img a la classe "cookieCachee"
+  //   if (img.classList.contains('cookieCachee')) {
+
+  //     // Faire quelque chose avec la balise img qui a la classe "cookieCachee"
+  //     console.log('Cette balise img a la classe cookieCachee:', img);
+  //   }
+  // });
+
+  //   }
 
 
 
