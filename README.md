@@ -33,7 +33,7 @@ Bienvenue dans notre jeu Ce jeu est basé sur le concept de Candy Crush , où le
 - La grille est générée avec des cookies aléatoires au début du jeu.
 - Le code est commenté pour faciliter la compréhension et l'extension du jeu.
 
-# Cookie Crunch - Jeu Match-3
+# Cookie Crunch 
 
 Bienvenue dans Cookie Crunch, un jeu de type Match-3 où l'objectif est d'aligner des cookies identiques pour gagner des points.
 
