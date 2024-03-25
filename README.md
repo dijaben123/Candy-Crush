@@ -33,4 +33,4 @@ Welcome to Cookie Crunch, a Match-3 game where the goal is to align identical co
 - The grid is generated with random cookies at the beginning of the game.
 - The code is commented to facilitate understanding and extension of the game.
 
-Enjoy playing Cookie Crunch! [Play Now](https://dijaben123.github.io/candy_crash2/)
+Enjoy playing Cookie Crunch! [Play Now](https://dijaben123.github.io/Candy-Crush/)
