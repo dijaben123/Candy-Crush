@@ -1,66 +1,36 @@
-# Game
+# Cookie Crunch
 
-Bienvenue dans notre jeu Ce jeu est basé sur le concept de Candy Crush , où le joueur doit aligner au moins trois cookies du même type pour les faire disparaître et gagner des points.
+Welcome to Cookie Crunch, a Match-3 game where the goal is to align identical cookies to score points.
 
 ## Installation
 
-1. Clonez le dépôt : `git clone https://github.com/dijaben123/candy_crash2.git`
-2. Ouvrez le fichier `index.html` dans votre navigateur préféré.
+1. Clone the repository: `git clone https://github.com/dijaben123/Candy crush.git`
+2. Open the `index.html` file in your preferred browser.
 
-## Comment jouer
+## How to Play
 
-- L'objectif du jeu est d'obtenir le meilleur score possible en alignant les cookies.
-- Cliquez sur un cookie pour le sélectionner.
-- Cliquez sur un autre cookie adjacent pour les échanger et créer des alignements.
-- Faites glisser les cookies pour les échanger.
+- The objective of the game is to achieve the highest score possible by aligning cookies.
+- Click on a cookie to select it.
+- Click on another adjacent cookie to swap them and create alignments.
+- Drag cookies to swap them.
 
-## Fonctionnalités
+## Features
 
-- **Alignements:** Gagnez des points en alignant au moins trois cookies du même type horizontalement ou verticalement.
-- **Score Incrémental:** Le score augmente en fonction de la longueur des alignements. Plus l'alignement est long, plus le score est élevé.
-- **Séquences de Chutes à la Chaîne:** Si un nouvel alignement est créé après une première série de chutes, le score est multiplié.
+- **Alignments:** Score points by aligning at least three cookies of the same type horizontally or vertically.
+- **Incremental Scoring:** The score increases based on the length of alignments. The longer the alignment, the higher the score.
+- **Chain Falling Sequences:** If a new alignment is created after an initial sequence of falls, the score is multiplied.
 
-## Structure du Code
+## Code Structure
 
-- `index.html`: Fichier HTML principal.
-- `main.js`: Logique principale du jeu.
-- `cookie.js`: Définition de la classe Cookie.
-- `utils.js`: Fonctions utilitaires.
+- `index.html`: Main HTML file.
+- `main.js`: Main game logic.
+- `cookie.js`: Definition of the Cookie class.
+- `utils.js`: Utility functions.
 
-## Développement
+## Development
 
-- Le code est écrit en JavaScript et utilise des fonctionnalités modernes du langage.
-- La grille est générée avec des cookies aléatoires au début du jeu.
-- Le code est commenté pour faciliter la compréhension et l'extension du jeu.
+- The code is written in JavaScript and utilizes modern language features.
+- The grid is generated with random cookies at the beginning of the game.
+- The code is commented to facilitate understanding and extension of the game.
 
-# Cookie Crunch 
-
-Bienvenue dans Cookie Crunch, un jeu de type Match-3 où l'objectif est d'aligner des cookies identiques pour gagner des points.
-
-## Fonctions Principales
-
-### `fillHiddenColumnsAndRows()`
-
-Cette fonction remplit les colonnes cachées et les lignes cachées avec de nouveaux cookies aléatoires lorsque des cookies sont cachés.
-
-### `slide()`
-
-La fonction `slide` est responsable du glissement des cookies vers le bas. Elle parcourt la grille pour déplacer les cookies cachés vers les positions visibles et met à jour les attributs des images des cookies en conséquence.
-
-### `updateTimeOnPage()`
-
-Cette fonction met à jour l'affichage du temps sur la page en fonction du temps de jeu actuel.
-
-### `startChronometer()`
-
-Cette fonction démarre un chronomètre qui incrémente le temps de jeu chaque seconde.
-
-### `changerNiveau()`
-
-Cette fonction gère le changement de niveau du jeu en augmentant le niveau et en ajustant le nombre de cookies par niveau.
-
-### `updateScoreOnPage()`
-
-Cette fonction met à jour le score affiché sur la page et vérifie si le joueur atteint un score spécifique pour passer au niveau suivant.
-
- Amusez-vous à jouer à Cookie Crunch! https://dijaben123.github.io/candy_crash2/
+Enjoy playing Cookie Crunch! [Play Now](https://dijaben123.github.io/candy_crash2/)
